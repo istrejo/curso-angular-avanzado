@@ -22,12 +22,12 @@ import { Category } from '@shared/models/category.model';
   templateUrl: './list.component.html',
 })
 export default class ListComponent implements OnInit, OnChanges {
+  @Input() slug?: string;
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
   private cartService = inject(CartService);
   private productService = inject(ProductService);
   private categoryService = inject(CategoryService);
-  @Input() category_id?: string;
 
   ngOnInit() {
     this.getCategories();
@@ -42,7 +42,7 @@ export default class ListComponent implements OnInit, OnChanges {
   }
 
   private getProducts() {
-    this.productService.getProducts(this.category_id).subscribe({
+    this.productService.getProducts({ category_slug: this.slug }).subscribe({
       next: (products) => {
         this.products.set(products);
       },
